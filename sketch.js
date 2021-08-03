@@ -1,49 +1,42 @@
-var trex, trex_running, edges;
-var groundImage;
-var ground
-function preload(){
-  trex_running = loadAnimation("trex1.png","trex3.png","trex4.png");
-  groundImage = loadImage("ground2.png")
+var trex, trex_running, trex_collided;
+var ground, invisibleGround, groundImage;
+
+function preload() {
+    trex_running = loadAnimation("trex1.png", "trex3.png", "trex4.png");
+    trex_collided = loadImage("trex_collided.png");
+    groundImage = loadImage("ground2.png")
 }
 
-function setup(){
-  createCanvas(600,200);
-  
-  // creating trex
-  trex = createSprite(50,160,20,50);
-  trex.addAnimation("running", trex_running);
-  edges = createEdgeSprites();
-  
-  //adding scale and position to trex
-  trex.scale = 0.5;
-  trex.x = 50
-  
+function setup() {
+    createCanvas(600, 200);
 
-  ground = createSprite(300, 180, 1000, 20)
-  ground.velocityX = -2
-  ground.addImage(groundImage)
+//create a trex sprite
+    trex = createSprite(50,160,20,50);
+    trex.addAnimation("running", trex_running);
+    trex.scale = 0.5;
+
+//create a ground sprite
+    ground = createSprite(200,180,400,20);
+    ground.addImage("ground",groundImage);
+    ground.x = ground.width /2;
+    ground.velocityX = -4;
+
+//create an invisible ground sprite
+    invisibleGround = createSprite(200, 190, 400, 20)
+    invisibleGround.visible = false 
 }
 
-
-function draw(){
-  //set background color 
-  background("red");
-  
-  //logging the y position of the trex
-  console.log(trex.y)
-  
-  //jump when space key is pressed
-  if(keyDown("space")){
-    trex.velocityY = -10;
-  }
-  
-  trex.velocityY = trex.velocityY + 0.5;
-  
-  //stop trex from falling down
-  trex.collide(ground)
-
-  if(ground.x < 0){
-    ground.x = 300
-  }
-  drawSprites();
+function draw() {
+    background(220);
+//jump when the space button is pressed
+    if (keyDown("space") && trex.y > 156) {
+        trex.velocityY = -10;
+    }
+    trex.velocityY = trex.velocityY + 0.8
+    if (ground.x < 0) {
+        ground.x = ground.width / 2;
+    }
+    trex.collide(invisibleGround);
+    drawSprites();
+    console.log(trex.y)
 }
